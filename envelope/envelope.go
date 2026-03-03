@@ -32,8 +32,10 @@ type Envelope struct {
 	Timestamp   time.Time         `json:"timestamp"`
 	TTL         int               `json:"ttl,omitempty"`
 	TraceID     string            `json:"trace_id,omitempty"`
-	Signature   string            `json:"signature,omitempty"`
-	Nonce       string            `json:"nonce,omitempty"`
+	Signature    string            `json:"signature,omitempty"`
+	Nonce        string            `json:"nonce,omitempty"`
+	Encrypted    bool              `json:"encrypted,omitempty"`
+	SenderX25519 string            `json:"sender_x25519,omitempty"`
 }
 
 // New creates a new Envelope with a generated ID and timestamp.
