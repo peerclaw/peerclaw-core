@@ -3,7 +3,7 @@ package agentcard
 import (
 	"time"
 
-	"github.com/peerclaw/peerclaw-go/protocol"
+	"github.com/peerclaw/peerclaw-core/protocol"
 )
 
 // AgentStatus represents the current status of an agent.

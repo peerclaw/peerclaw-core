@@ -1,4 +1,4 @@
-module github.com/peerclaw/peerclaw-go
+module github.com/peerclaw/peerclaw-core
 
 go 1.24.1
 

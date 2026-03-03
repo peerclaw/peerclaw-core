@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/peerclaw/peerclaw-go/protocol"
+	"github.com/peerclaw/peerclaw-core/protocol"
 )
 
 // MessageType categorizes the purpose of a message.
