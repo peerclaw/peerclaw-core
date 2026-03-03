@@ -1,0 +1,153 @@
+syntax = "proto3";
+
+package peerclaw.v1;
+
+option go_package = "github.com/peerclaw/peerclaw/api/proto/v1;v1";
+
+import "google/protobuf/timestamp.proto";
+
+service AgentRegistry {
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc Deregister(DeregisterRequest) returns (DeregisterResponse);
+  rpc Heartbeat(HeartbeatRequest) returns (HeartbeatResponse);
+  rpc GetAgent(GetAgentRequest) returns (Agent);
+  rpc ListAgents(ListAgentsRequest) returns (ListAgentsResponse);
+  rpc Discover(DiscoverRequest) returns (DiscoverResponse);
+  rpc GetRoutes(GetRoutesRequest) returns (RouteTable);
+  rpc WatchRoutes(WatchRoutesRequest) returns (stream RouteUpdate);
+}
+
+message Agent {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string version = 4;
+  repeated string capabilities = 5;
+  Endpoint endpoint = 6;
+  repeated string protocols = 7;
+  AuthInfo auth = 8;
+  map<string, string> metadata = 9;
+  PeerClawExtension peerclaw = 10;
+  google.protobuf.Timestamp registered_at = 11;
+  google.protobuf.Timestamp last_heartbeat = 12;
+  AgentStatus status = 13;
+}
+
+message Endpoint {
+  string url = 1;
+  string host = 2;
+  int32 port = 3;
+  string transport = 4; // grpc, http, ws, stdio
+}
+
+message AuthInfo {
+  string type = 1; // bearer, mtls, api_key, none
+  map<string, string> params = 2;
+}
+
+message PeerClawExtension {
+  string nat_type = 1;        // full_cone, restricted, symmetric, none
+  string relay_preference = 2; // direct, relay, auto
+  int32 priority = 3;
+  repeated string tags = 4;
+}
+
+enum AgentStatus {
+  AGENT_STATUS_UNSPECIFIED = 0;
+  AGENT_STATUS_ONLINE = 1;
+  AGENT_STATUS_OFFLINE = 2;
+  AGENT_STATUS_DEGRADED = 3;
+}
+
+message RegisterRequest {
+  string name = 1;
+  string description = 2;
+  string version = 3;
+  repeated string capabilities = 4;
+  Endpoint endpoint = 5;
+  repeated string protocols = 6;
+  AuthInfo auth = 7;
+  map<string, string> metadata = 8;
+  PeerClawExtension peerclaw = 9;
+}
+
+message RegisterResponse {
+  string agent_id = 1;
+  google.protobuf.Timestamp registered_at = 2;
+}
+
+message DeregisterRequest {
+  string agent_id = 1;
+}
+
+message DeregisterResponse {}
+
+message HeartbeatRequest {
+  string agent_id = 1;
+  AgentStatus status = 2;
+  map<string, string> metadata = 3;
+}
+
+message HeartbeatResponse {
+  google.protobuf.Timestamp next_deadline = 1;
+}
+
+message GetAgentRequest {
+  string agent_id = 1;
+}
+
+message ListAgentsRequest {
+  string protocol = 1;
+  string capability = 2;
+  AgentStatus status = 3;
+  int32 page_size = 4;
+  string page_token = 5;
+}
+
+message ListAgentsResponse {
+  repeated Agent agents = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+}
+
+message DiscoverRequest {
+  repeated string capabilities = 1;
+  string protocol = 2;
+  int32 max_results = 3;
+}
+
+message DiscoverResponse {
+  repeated Agent agents = 1;
+}
+
+message GetRoutesRequest {}
+
+message RouteTable {
+  repeated RouteEntry routes = 1;
+  google.protobuf.Timestamp updated_at = 2;
+}
+
+message RouteEntry {
+  string source_id = 1;
+  string target_id = 2;
+  string protocol = 3;
+  Endpoint endpoint = 4;
+  int32 latency_ms = 5;
+  int32 priority = 6;
+}
+
+message WatchRoutesRequest {
+  string agent_id = 1;
+}
+
+message RouteUpdate {
+  enum UpdateType {
+    UPDATE_TYPE_UNSPECIFIED = 0;
+    UPDATE_TYPE_ADD = 1;
+    UPDATE_TYPE_REMOVE = 2;
+    UPDATE_TYPE_MODIFY = 3;
+  }
+  UpdateType type = 1;
+  RouteEntry route = 2;
+  google.protobuf.Timestamp timestamp = 3;
+}

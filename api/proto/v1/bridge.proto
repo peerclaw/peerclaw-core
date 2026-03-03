@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package peerclaw.v1;
+
+option go_package = "github.com/peerclaw/peerclaw/api/proto/v1;v1";
+
+import "google/protobuf/timestamp.proto";
+
+service ProtocolBridgeService {
+  rpc SendMessage(SendMessageRequest) returns (SendMessageResponse);
+  rpc StreamMessages(StreamMessagesRequest) returns (stream Envelope);
+  rpc Translate(TranslateRequest) returns (TranslateResponse);
+  rpc ListBridges(ListBridgesRequest) returns (ListBridgesResponse);
+}
+
+message Envelope {
+  string id = 1;
+  string source = 2;
+  string destination = 3;
+  string protocol = 4;
+  string message_type = 5;
+  string content_type = 6;
+  bytes payload = 7;
+  map<string, string> metadata = 8;
+  google.protobuf.Timestamp timestamp = 9;
+  int32 ttl = 10;
+  string trace_id = 11;
+}
+
+message SendMessageRequest {
+  Envelope envelope = 1;
+}
+
+message SendMessageResponse {
+  string message_id = 1;
+  bool accepted = 2;
+  string error = 3;
+}
+
+message StreamMessagesRequest {
+  string agent_id = 1;
+  repeated string protocols = 2;
+}
+
+message TranslateRequest {
+  Envelope envelope = 1;
+  string target_protocol = 2;
+}
+
+message TranslateResponse {
+  Envelope translated = 1;
+}
+
+message ListBridgesRequest {}
+
+message ListBridgesResponse {
+  repeated BridgeInfo bridges = 1;
+}
+
+message BridgeInfo {
+  string protocol = 1;
+  bool available = 2;
+  int32 connected_agents = 3;
+}
