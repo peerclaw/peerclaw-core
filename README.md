@@ -14,9 +14,9 @@ go get github.com/peerclaw/peerclaw-core
 |---|------|
 | `identity` | Ed25519 密钥对生成、加载、保存；消息签名与验证；X25519 密钥派生 |
 | `envelope` | 统一消息信封 `Envelope`，跨协议的通用消息格式，支持加密标记 |
-| `agentcard` | Agent Card 定义（兼容 A2A 标准 + PeerClaw 扩展） |
+| `agentcard` | Agent Card 定义（兼容 A2A 标准 + PeerClaw 扩展），含 Skills / Tools 结构化能力声明 |
 | `protocol` | 协议（A2A / ACP / MCP）与传输方式常量 |
-| `signaling` | WebRTC 信令消息类型（offer / answer / ICE candidate / config），ICE Server 配置，X25519 密钥交换 |
+| `signaling` | WebRTC 信令消息类型（offer / answer / ICE candidate / config / bridge_message），ICE Server 配置，X25519 密钥交换 |
 
 ## 快速示例
 
