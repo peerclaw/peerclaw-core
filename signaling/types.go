@@ -9,13 +9,18 @@ import (
 type MessageType string
 
 const (
-	MessageTypeOffer         MessageType = "offer"
-	MessageTypeAnswer        MessageType = "answer"
-	MessageTypeICECandidate  MessageType = "ice_candidate"
-	MessageTypePing          MessageType = "ping"
-	MessageTypePong          MessageType = "pong"
-	MessageTypeConfig        MessageType = "config"
-	MessageTypeBridgeMessage MessageType = "bridge_message"
+	MessageTypeOffer              MessageType = "offer"
+	MessageTypeAnswer             MessageType = "answer"
+	MessageTypeICECandidate       MessageType = "ice_candidate"
+	MessageTypePing               MessageType = "ping"
+	MessageTypePong               MessageType = "pong"
+	MessageTypeConfig             MessageType = "config"
+	MessageTypeBridgeMessage      MessageType = "bridge_message"
+	MessageTypeFederationForward  MessageType = "federation_forward"
+	MessageTypeDHTPing            MessageType = "dht_ping"
+	MessageTypeDHTStore           MessageType = "dht_store"
+	MessageTypeDHTFindNode        MessageType = "dht_find_node"
+	MessageTypeDHTFindValue       MessageType = "dht_find_value"
 )
 
 // ICEServerConfig describes an ICE server (STUN or TURN) for WebRTC connectivity.

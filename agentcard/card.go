@@ -57,6 +57,11 @@ type PeerClawExtension struct {
 	RelayPreference string   `json:"relay_preference,omitempty"` // direct, relay, auto
 	Priority        int      `json:"priority,omitempty"`
 	Tags            []string `json:"tags,omitempty"`
+	NostrPubKey     string   `json:"nostr_pubkey,omitempty"`
+	DHTNodeID       string   `json:"dht_node_id,omitempty"`
+	ReputationScore float64  `json:"reputation_score,omitempty"`
+	NostrRelays     []string `json:"nostr_relays,omitempty"`
+	IdentityAnchor  string   `json:"identity_anchor,omitempty"`
 }
 
 // HasCapability checks if the agent advertises a given capability.
