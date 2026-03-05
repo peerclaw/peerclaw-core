@@ -1,6 +1,7 @@
 package agentcard
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/peerclaw/peerclaw-core/protocol"
@@ -24,6 +25,8 @@ type Card struct {
 	Version       string              `json:"version,omitempty"`
 	PublicKey     string              `json:"public_key,omitempty"`
 	Capabilities  []string            `json:"capabilities,omitempty"`
+	Skills        []Skill             `json:"skills,omitempty"`  // A2A-compatible structured skills
+	Tools         []Tool              `json:"tools,omitempty"`   // MCP-compatible tool definitions
 	Endpoint      Endpoint            `json:"endpoint"`
 	Protocols     []protocol.Protocol `json:"protocols"`
 	Auth          AuthInfo            `json:"auth,omitempty"`
@@ -70,6 +73,41 @@ func (c *Card) HasCapability(cap string) bool {
 func (c *Card) SupportsProtocol(p protocol.Protocol) bool {
 	for _, pp := range c.Protocols {
 		if pp == p {
+			return true
+		}
+	}
+	return false
+}
+
+// Skill represents a structured capability the agent can perform (A2A-compatible).
+type Skill struct {
+	Name        string   `json:"name"`
+	Description string   `json:"description,omitempty"`
+	InputModes  []string `json:"input_modes,omitempty"`
+	OutputModes []string `json:"output_modes,omitempty"`
+}
+
+// Tool represents an MCP-compatible tool definition.
+type Tool struct {
+	Name        string          `json:"name"`
+	Description string          `json:"description,omitempty"`
+	InputSchema json.RawMessage `json:"input_schema,omitempty"`
+}
+
+// HasSkill checks if the agent advertises a given skill by name.
+func (c *Card) HasSkill(name string) bool {
+	for _, s := range c.Skills {
+		if s.Name == name {
+			return true
+		}
+	}
+	return false
+}
+
+// HasTool checks if the agent advertises a given tool by name.
+func (c *Card) HasTool(name string) bool {
+	for _, t := range c.Tools {
+		if t.Name == name {
 			return true
 		}
 	}
