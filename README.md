@@ -1,26 +1,28 @@
+**English** | [中文](README_zh.md)
+
 # peerclaw-core
 
-PeerClaw 生态的核心共享类型库。定义了身份、消息信封、Agent Card、协议常量和信令类型 —— 零重依赖，供 `peerclaw-server` 和 `peerclaw-agent` 共同引用。
+The core shared type library for the PeerClaw ecosystem. Defines identity, message envelopes, Agent Card, protocol constants, and signaling types -- zero heavy dependencies, shared by both `peerclaw-server` and `peerclaw-agent`.
 
-## 安装
+## Installation
 
 ```bash
 go get github.com/peerclaw/peerclaw-core
 ```
 
-## 包概览
+## Package Overview
 
-| 包 | 说明 |
+| Package | Description |
 |---|------|
-| `identity` | Ed25519 密钥对生成、加载、保存；消息签名与验证；X25519 密钥派生 |
-| `envelope` | 统一消息信封 `Envelope`，跨协议的通用消息格式，支持加密标记 |
-| `agentcard` | Agent Card 定义（兼容 A2A 标准 + PeerClaw 扩展），含 Skills / Tools 结构化能力声明 |
-| `protocol` | 协议（A2A / ACP / MCP）与传输方式常量 |
-| `signaling` | WebRTC 信令消息类型（offer / answer / ICE candidate / config / bridge_message），ICE Server 配置，X25519 密钥交换 |
+| `identity` | Ed25519 key pair generation, loading, and saving; message signing and verification; X25519 key derivation |
+| `envelope` | Unified message envelope `Envelope`, a cross-protocol common message format with encryption flag support |
+| `agentcard` | Agent Card definition (compatible with the A2A standard + PeerClaw extensions), including structured capability declarations for Skills / Tools |
+| `protocol` | Protocol (A2A / ACP / MCP) and transport method constants |
+| `signaling` | WebRTC signaling message types (offer / answer / ICE candidate / config / bridge_message), ICE Server configuration, X25519 key exchange |
 
-## 快速示例
+## Quick Examples
 
-### 生成密钥对
+### Generate a Key Pair
 
 ```go
 package main
@@ -34,41 +36,41 @@ func main() {
     kp, _ := identity.GenerateKeypair()
     fmt.Println("Public Key:", kp.PublicKeyString())
 
-    // 持久化到文件
+    // Persist to file
     identity.SaveKeypair(kp, "agent.key")
 
-    // 从文件加载
+    // Load from file
     kp2, _ := identity.LoadKeypair("agent.key")
     fmt.Println("Loaded:    ", kp2.PublicKeyString())
 }
 ```
 
-### 签名与验证
+### Signing and Verification
 
 ```go
 data := []byte("hello peerclaw")
 sig := identity.Sign(kp.PrivateKey, data)
 
 err := identity.Verify(kp.PublicKey, data, sig)
-// err == nil 表示签名有效
+// err == nil means the signature is valid
 ```
 
-### X25519 密钥派生
+### X25519 Key Derivation
 
-从 Ed25519 密钥对派生 X25519 密钥，用于 ECDH 密钥交换和端到端加密：
+Derive X25519 keys from an Ed25519 key pair for ECDH key exchange and end-to-end encryption:
 
 ```go
 x25519Priv, _ := kp.X25519PrivateKey()
 x25519Pub, _ := kp.X25519PublicKey()
 
-// 序列化为 hex 字符串
+// Serialize to hex string
 pubHex := kp.X25519PublicKeyString()
 
-// 从 hex 解析
+// Parse from hex
 parsedPub, _ := identity.ParseX25519PublicKey(pubHex)
 ```
 
-### 创建消息信封
+### Create a Message Envelope
 
 ```go
 import (
@@ -79,14 +81,14 @@ import (
 env := envelope.New("agent-alice", "agent-bob", protocol.ProtocolA2A, []byte(`{"text":"hi"}`))
 env.WithTTL(30).WithMetadata("priority", "high")
 
-// 加密消息标记
+// Mark the message as encrypted
 env.Encrypted = true
 env.SenderX25519 = "hex-encoded-x25519-public-key"
 ```
 
-## 依赖
+## Dependencies
 
-仅依赖 `github.com/google/uuid`，保持最小化。
+Only depends on `github.com/google/uuid` -- kept minimal by design.
 
 ## License
 
