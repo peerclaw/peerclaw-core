@@ -62,6 +62,7 @@ type PeerClawExtension struct {
 	ReputationScore float64  `json:"reputation_score,omitempty"`
 	NostrRelays     []string `json:"nostr_relays,omitempty"`
 	IdentityAnchor  string   `json:"identity_anchor,omitempty"`
+	PublicEndpoint  bool     `json:"public_endpoint,omitempty"` // Owner opts-in to expose endpoint URL publicly
 }
 
 // HasCapability checks if the agent advertises a given capability.
