@@ -2,7 +2,7 @@
 
 # peerclaw-core
 
-PeerClaw 生态的核心共享类型库。定义了身份、消息信封、Agent Card、协议常量和信令类型 —— 零重依赖，供 `peerclaw-server` 和 `peerclaw-agent` 共同引用。
+[PeerClaw](https://github.com/peerclaw/peerclaw) 身份与信任平台及 Agent Marketplace 的核心共享类型库。定义了身份、消息信封、Agent Card、协议常量和信令类型 —— 零重依赖，供 `peerclaw-server` 和 `peerclaw-agent` 共同引用。
 
 ## 安装
 
