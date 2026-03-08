@@ -32,6 +32,7 @@ type Envelope struct {
 	Timestamp   time.Time         `json:"timestamp"`
 	TTL         int               `json:"ttl,omitempty"`
 	TraceID     string            `json:"trace_id,omitempty"`
+	SessionID    string            `json:"session_id,omitempty"`
 	Signature    string            `json:"signature,omitempty"`
 	Nonce        string            `json:"nonce,omitempty"`
 	Encrypted    bool              `json:"encrypted,omitempty"`
@@ -63,6 +64,12 @@ func (e *Envelope) WithMessageType(mt MessageType) *Envelope {
 // WithTTL sets the time-to-live and returns the envelope for chaining.
 func (e *Envelope) WithTTL(ttl int) *Envelope {
 	e.TTL = ttl
+	return e
+}
+
+// WithSessionID sets the session ID for multi-turn conversations and returns the envelope for chaining.
+func (e *Envelope) WithSessionID(sessionID string) *Envelope {
+	e.SessionID = sessionID
 	return e
 }
 
