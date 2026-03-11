@@ -22,6 +22,7 @@ const (
 	MessageTypeDHTFindNode        MessageType = "dht_find_node"
 	MessageTypeDHTFindValue       MessageType = "dht_find_value"
 	MessageTypeConnectionRequest  MessageType = "connection_request"
+	MessageTypeMailboxWakeup      MessageType = "mailbox_wakeup"
 )
 
 // ICEServerConfig describes an ICE server (STUN or TURN) for WebRTC connectivity.
