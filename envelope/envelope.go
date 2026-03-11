@@ -73,6 +73,25 @@ func (e *Envelope) WithSessionID(sessionID string) *Envelope {
 	return e
 }
 
+// NewResponse creates a response envelope from a request envelope.
+// It generates a new ID, copies TraceID and SessionID from the request,
+// swaps Source and Destination, and sets MessageType to response.
+func NewResponse(req *Envelope, payload []byte) *Envelope {
+	return &Envelope{
+		ID:          uuid.New().String(),
+		Source:      req.Destination,
+		Destination: req.Source,
+		Protocol:    req.Protocol,
+		MessageType: MessageTypeResponse,
+		ContentType: req.ContentType,
+		Payload:     payload,
+		Metadata:    make(map[string]string),
+		Timestamp:   time.Now(),
+		TraceID:     req.TraceID,
+		SessionID:   req.SessionID,
+	}
+}
+
 // WithMetadata adds a metadata key-value pair and returns the envelope for chaining.
 func (e *Envelope) WithMetadata(key, value string) *Envelope {
 	if e.Metadata == nil {
