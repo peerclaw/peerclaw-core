@@ -1,6 +1,8 @@
 package envelope
 
 import (
+	"crypto/sha256"
+	"encoding/binary"
 	"time"
 
 	"github.com/google/uuid"
@@ -99,4 +101,41 @@ func (e *Envelope) WithMetadata(key, value string) *Envelope {
 	}
 	e.Metadata[key] = value
 	return e
+}
+
+// SigningPayload returns a canonical byte representation of the envelope's
+// security-critical fields for signing. This covers Source, Destination,
+// Protocol, MessageType, Nonce, Timestamp, and Payload — preventing an
+// attacker from modifying routing or replay-protection fields without
+// invalidating the signature.
+//
+// This implements the identity.SignableEnvelope interface.
+func (e *Envelope) SigningPayload() []byte {
+	h := sha256.New()
+	h.Write([]byte(e.Source))
+	h.Write([]byte{0}) // separator
+	h.Write([]byte(e.Destination))
+	h.Write([]byte{0})
+	h.Write([]byte(e.Protocol))
+	h.Write([]byte{0})
+	h.Write([]byte(e.MessageType))
+	h.Write([]byte{0})
+	h.Write([]byte(e.Nonce))
+	h.Write([]byte{0})
+	// Encode timestamp as Unix nanoseconds for deterministic representation.
+	var tsBuf [8]byte
+	binary.BigEndian.PutUint64(tsBuf[:], uint64(e.Timestamp.UnixNano()))
+	h.Write(tsBuf[:])
+	h.Write(e.Payload)
+	return h.Sum(nil)
+}
+
+// SetSignature sets the envelope's signature field.
+func (e *Envelope) SetSignature(sig string) {
+	e.Signature = sig
+}
+
+// GetSignature returns the envelope's signature field.
+func (e *Envelope) GetSignature() string {
+	return e.Signature
 }
