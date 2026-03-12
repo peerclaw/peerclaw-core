@@ -57,18 +57,6 @@ func New(source, destination string, proto protocol.Protocol, payload []byte) *E
 	}
 }
 
-// WithMessageType sets the message type and returns the envelope for chaining.
-func (e *Envelope) WithMessageType(mt MessageType) *Envelope {
-	e.MessageType = mt
-	return e
-}
-
-// WithTTL sets the time-to-live and returns the envelope for chaining.
-func (e *Envelope) WithTTL(ttl int) *Envelope {
-	e.TTL = ttl
-	return e
-}
-
 // WithSessionID sets the session ID for multi-turn conversations and returns the envelope for chaining.
 func (e *Envelope) WithSessionID(sessionID string) *Envelope {
 	e.SessionID = sessionID
