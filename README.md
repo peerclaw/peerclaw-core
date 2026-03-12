@@ -2,6 +2,8 @@
 
 # peerclaw-core
 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+
 The core shared type library for the [PeerClaw](https://github.com/peerclaw/peerclaw) identity & trust platform and Agent Marketplace. Defines identity, message envelopes, Agent Card, protocol constants, and signaling types -- zero heavy dependencies, shared by both `peerclaw-server` and `peerclaw-agent`.
 
 ## Installation
@@ -92,4 +94,4 @@ Only depends on `github.com/google/uuid` -- kept minimal by design.
 
 ## License
 
-MIT
+Apache 2.0

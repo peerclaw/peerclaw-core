@@ -2,6 +2,8 @@
 
 # peerclaw-core
 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+
 [PeerClaw](https://github.com/peerclaw/peerclaw) 身份与信任平台及 Agent Marketplace 的核心共享类型库。定义了身份、消息信封、Agent Card、协议常量和信令类型 —— 零重依赖，供 `peerclaw-server` 和 `peerclaw-agent` 共同引用。
 
 ## 安装
@@ -92,4 +94,4 @@ env.SenderX25519 = "hex-encoded-x25519-public-key"
 
 ## License
 
-MIT
+Apache 2.0
