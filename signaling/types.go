@@ -17,10 +17,6 @@ const (
 	MessageTypeConfig             MessageType = "config"
 	MessageTypeBridgeMessage      MessageType = "bridge_message"
 	MessageTypeFederationForward  MessageType = "federation_forward"
-	MessageTypeDHTPing            MessageType = "dht_ping"
-	MessageTypeDHTStore           MessageType = "dht_store"
-	MessageTypeDHTFindNode        MessageType = "dht_find_node"
-	MessageTypeDHTFindValue       MessageType = "dht_find_value"
 	MessageTypeConnectionRequest  MessageType = "connection_request"
 	MessageTypeMailboxWakeup      MessageType = "mailbox_wakeup"
 )
@@ -42,5 +38,6 @@ type SignalMessage struct {
 	Timestamp       time.Time         `json:"timestamp"`
 	ICEServers      []ICEServerConfig `json:"ice_servers,omitempty"`
 	X25519PublicKey string            `json:"x25519_public_key,omitempty"`
-	Payload         json.RawMessage   `json:"payload,omitempty"` // For bridge_message type
+	DTLSFingerprint string            `json:"dtls_fingerprint,omitempty"` // e.g. "sha-256 AB:CD:..."
+	Payload         json.RawMessage   `json:"payload,omitempty"`         // For bridge_message type
 }
