@@ -94,4 +94,6 @@ Only depends on `github.com/google/uuid` -- kept minimal by design.
 
 ## License
 
-Apache 2.0
+Licensed under the [Apache License 2.0](LICENSE).
+
+Copyright 2025 PeerClaw Contributors.

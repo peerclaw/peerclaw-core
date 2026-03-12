@@ -92,6 +92,8 @@ env.SenderX25519 = "hex-encoded-x25519-public-key"
 
 仅依赖 `github.com/google/uuid`，保持最小化。
 
-## License
+## 许可证
 
-Apache 2.0
+基于 [Apache License 2.0](LICENSE) 开源。
+
+Copyright 2025 PeerClaw Contributors.
