@@ -19,6 +19,8 @@ const (
 	MessageTypeFederationForward  MessageType = "federation_forward"
 	MessageTypeConnectionRequest  MessageType = "connection_request"
 	MessageTypeMailboxWakeup      MessageType = "mailbox_wakeup"
+	MessageTypeContactRequest    MessageType = "contact_request"
+	MessageTypeSignalingError    MessageType = "signaling_error"
 )
 
 // ICEServerConfig describes an ICE server (STUN or TURN) for WebRTC connectivity.
