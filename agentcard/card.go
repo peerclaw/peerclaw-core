@@ -58,7 +58,6 @@ type PeerClawExtension struct {
 	Priority        int      `json:"priority,omitempty"`
 	Tags            []string `json:"tags,omitempty"`
 	NostrPubKey     string   `json:"nostr_pubkey,omitempty"`
-	DHTNodeID       string   `json:"dht_node_id,omitempty"`
 	ReputationScore float64  `json:"reputation_score,omitempty"`
 	NostrRelays     []string `json:"nostr_relays,omitempty"`
 	InboxRelays     []string `json:"inbox_relays,omitempty"` // Nostr relay URLs for offline mailbox (NIP-65 style)
