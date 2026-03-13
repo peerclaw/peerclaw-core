@@ -20,6 +20,7 @@ const (
 	MessageTypeConnectionRequest  MessageType = "connection_request"
 	MessageTypeMailboxWakeup      MessageType = "mailbox_wakeup"
 	MessageTypeContactRequest    MessageType = "contact_request"
+	MessageTypeContactAdded      MessageType = "contact_added"
 	MessageTypeSignalingError    MessageType = "signaling_error"
 )
 
