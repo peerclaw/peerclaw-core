@@ -22,6 +22,7 @@ const (
 	MessageTypeContactRequest    MessageType = "contact_request"
 	MessageTypeContactAdded      MessageType = "contact_added"
 	MessageTypeSignalingError    MessageType = "signaling_error"
+	MessageTypeNotification     MessageType = "notification"
 )
 
 // ICEServerConfig describes an ICE server (STUN or TURN) for WebRTC connectivity.
