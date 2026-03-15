@@ -1,8 +1,13 @@
 package agentcard
 
 import (
+	"encoding/base64"
+	"crypto/ed25519"
 	"encoding/json"
+	"fmt"
+	"net/url"
 	"time"
+	"unicode"
 
 	"github.com/peerclaw/peerclaw-core/protocol"
 )
@@ -115,6 +120,99 @@ func (c *Card) HasSkill(name string) bool {
 func (c *Card) HasTool(name string) bool {
 	for _, t := range c.Tools {
 		if t.Name == name {
+			return true
+		}
+	}
+	return false
+}
+
+// knownProtocols are the valid protocol values for agent registration.
+var knownProtocols = map[string]bool{
+	"a2a":      true,
+	"mcp":      true,
+	"acp":      true,
+	"custom":   true,
+	"peerclaw": true,
+}
+
+// Validate checks the Card fields for correctness and returns an error
+// describing the first invalid field found.
+func (c *Card) Validate() error {
+	// Name: required, 1-256 chars, no control characters.
+	if c.Name == "" {
+		return fmt.Errorf("name is required")
+	}
+	if len(c.Name) > 256 {
+		return fmt.Errorf("name must be at most 256 characters")
+	}
+	if containsControlChars(c.Name) {
+		return fmt.Errorf("name must not contain control characters")
+	}
+
+	// PublicKey: if provided, must be valid base64-encoded Ed25519 key (32 bytes).
+	if c.PublicKey != "" {
+		keyBytes, err := base64.StdEncoding.DecodeString(c.PublicKey)
+		if err != nil {
+			return fmt.Errorf("public_key must be valid base64: %w", err)
+		}
+		if len(keyBytes) != ed25519.PublicKeySize {
+			return fmt.Errorf("public_key must be %d bytes (Ed25519), got %d", ed25519.PublicKeySize, len(keyBytes))
+		}
+	}
+
+	// Capabilities: max 50 items, each ≤128 chars.
+	if len(c.Capabilities) > 50 {
+		return fmt.Errorf("capabilities must have at most 50 items")
+	}
+	for _, cap := range c.Capabilities {
+		if len(cap) > 128 {
+			return fmt.Errorf("each capability must be at most 128 characters")
+		}
+	}
+
+	// Endpoint URL: if provided, must be valid http/https URL.
+	if c.Endpoint.URL != "" {
+		u, err := url.Parse(c.Endpoint.URL)
+		if err != nil || (u.Scheme != "http" && u.Scheme != "https") {
+			return fmt.Errorf("endpoint URL must be a valid http/https URL")
+		}
+	}
+
+	// Endpoint Port: 0-65535.
+	if c.Endpoint.Port < 0 || c.Endpoint.Port > 65535 {
+		return fmt.Errorf("endpoint port must be between 0 and 65535")
+	}
+
+	// Protocols: max 10, must be known.
+	if len(c.Protocols) > 10 {
+		return fmt.Errorf("protocols must have at most 10 items")
+	}
+	for _, p := range c.Protocols {
+		if !knownProtocols[string(p)] {
+			return fmt.Errorf("unknown protocol: %s", p)
+		}
+	}
+
+	// Metadata: max 50 keys, key ≤128, value ≤1024.
+	if len(c.Metadata) > 50 {
+		return fmt.Errorf("metadata must have at most 50 keys")
+	}
+	for k, v := range c.Metadata {
+		if len(k) > 128 {
+			return fmt.Errorf("metadata key must be at most 128 characters")
+		}
+		if len(v) > 1024 {
+			return fmt.Errorf("metadata value must be at most 1024 characters")
+		}
+	}
+
+	return nil
+}
+
+// containsControlChars returns true if s contains any Unicode control characters.
+func containsControlChars(s string) bool {
+	for _, r := range s {
+		if unicode.IsControl(r) {
 			return true
 		}
 	}
