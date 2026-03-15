@@ -13,10 +13,12 @@ import (
 type MessageType string
 
 const (
-	MessageTypeRequest  MessageType = "request"
-	MessageTypeResponse MessageType = "response"
-	MessageTypeEvent    MessageType = "event"
-	MessageTypeError    MessageType = "error"
+	MessageTypeRequest      MessageType = "request"
+	MessageTypeResponse     MessageType = "response"
+	MessageTypeEvent        MessageType = "event"
+	MessageTypeError        MessageType = "error"
+	MessageTypeRekey        MessageType = "rekey"
+	MessageTypeRekeyResponse MessageType = "rekey_response"
 )
 
 // Envelope is the universal message wrapper that bridges different AI agent protocols.
