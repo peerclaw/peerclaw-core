@@ -7,9 +7,12 @@ import (
 )
 
 // Sign creates an Ed25519 signature over the data.
-func Sign(privKey ed25519.PrivateKey, data []byte) string {
+func Sign(privKey ed25519.PrivateKey, data []byte) (string, error) {
+	if privKey == nil {
+		return "", fmt.Errorf("private key is nil")
+	}
 	sig := ed25519.Sign(privKey, data)
-	return base64.StdEncoding.EncodeToString(sig)
+	return base64.StdEncoding.EncodeToString(sig), nil
 }
 
 // Verify checks an Ed25519 signature.
@@ -33,9 +36,16 @@ type SignableEnvelope interface {
 }
 
 // SignEnvelope signs the envelope's payload and sets the signature field.
-func SignEnvelope(env SignableEnvelope, privKey ed25519.PrivateKey) {
-	sig := Sign(privKey, env.SigningPayload())
+func SignEnvelope(env SignableEnvelope, privKey ed25519.PrivateKey) error {
+	if env == nil {
+		return fmt.Errorf("envelope is nil")
+	}
+	sig, err := Sign(privKey, env.SigningPayload())
+	if err != nil {
+		return fmt.Errorf("sign envelope: %w", err)
+	}
 	env.SetSignature(sig)
+	return nil
 }
 
 // VerifyEnvelope verifies the envelope's signature.

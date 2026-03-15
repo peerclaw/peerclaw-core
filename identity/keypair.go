@@ -39,10 +39,19 @@ func (kp *Keypair) PublicKeyString() string {
 }
 
 // SaveKeypair writes the private key seed to a file (32 bytes, base64-encoded).
+// Uses atomic write-then-rename to prevent corruption from interrupted writes.
 func SaveKeypair(kp *Keypair, path string) error {
 	seed := kp.PrivateKey.Seed()
 	encoded := base64.StdEncoding.EncodeToString(seed)
-	return os.WriteFile(path, []byte(encoded), 0600)
+	tmpPath := path + ".tmp"
+	if err := os.WriteFile(tmpPath, []byte(encoded), 0600); err != nil {
+		return fmt.Errorf("write keypair temp file: %w", err)
+	}
+	if err := os.Rename(tmpPath, path); err != nil {
+		_ = os.Remove(tmpPath)
+		return fmt.Errorf("rename keypair file: %w", err)
+	}
+	return nil
 }
 
 // LoadKeypair reads a keypair from a seed file.

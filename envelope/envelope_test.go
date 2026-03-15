@@ -143,7 +143,9 @@ func TestSignEnvelope_VerifyEnvelope_RoundTrip(t *testing.T) {
 
 	env := New("alice", "bob", protocol.ProtocolA2A, []byte("hello"))
 	env.Nonce = "test-nonce"
-	identity.SignEnvelope(env, kp.PrivateKey)
+	if err := identity.SignEnvelope(env, kp.PrivateKey); err != nil {
+		t.Fatalf("SignEnvelope: %v", err)
+	}
 
 	if env.Signature == "" {
 		t.Fatal("expected non-empty signature")
