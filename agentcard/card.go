@@ -12,6 +12,7 @@ type AgentStatus string
 
 const (
 	StatusOnline   AgentStatus = "online"
+	StatusBusy     AgentStatus = "busy"
 	StatusOffline  AgentStatus = "offline"
 	StatusDegraded AgentStatus = "degraded"
 )
