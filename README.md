@@ -21,6 +21,8 @@ go get github.com/peerclaw/peerclaw-core
 | `agentcard` | Agent Card definition (compatible with the A2A standard + PeerClaw extensions), including structured capability declarations for Skills / Tools |
 | `protocol` | Protocol (A2A / ACP / MCP) and transport method constants |
 | `signaling` | WebRTC signaling message types (offer / answer / ICE candidate / config / bridge_message), ICE Server configuration, X25519 key exchange |
+| `errors` | Structured error handling with machine-readable codes (not_found, validation_error, auth_error, conflict, internal_error, timeout, rate_limited) |
+| `contacts` | Contact request types and status definitions (pending / approved / rejected) |
 
 ## Quick Examples
 
