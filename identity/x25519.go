@@ -4,6 +4,7 @@ import (
 	"crypto/ecdh"
 	"crypto/sha512"
 	"encoding/base64"
+	"fmt"
 )
 
 // X25519PublicKey derives an X25519 public key from the Ed25519 keypair's seed.
@@ -21,6 +22,9 @@ func (kp *Keypair) X25519PublicKey() (*ecdh.PublicKey, error) {
 // The derivation matches the standard Ed25519-to-X25519 conversion used by libsodium:
 // SHA-512 of the seed, clamp the lower 32 bytes.
 func (kp *Keypair) X25519PrivateKey() (*ecdh.PrivateKey, error) {
+	if kp == nil || kp.PrivateKey == nil {
+		return nil, fmt.Errorf("keypair not initialized")
+	}
 	seed := kp.PrivateKey.Seed()
 	h := sha512.Sum512(seed)
 	// Clamp (RFC 7748 §5)
