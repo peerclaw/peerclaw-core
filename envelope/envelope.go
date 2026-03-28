@@ -1,8 +1,11 @@
 package envelope
 
 import (
+	"crypto/rand"
 	"crypto/sha256"
 	"encoding/binary"
+	"encoding/hex"
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -82,6 +85,22 @@ func NewResponse(req *Envelope, payload []byte) *Envelope {
 		TraceID:     req.TraceID,
 		SessionID:   req.SessionID,
 	}
+}
+
+// WithTTL sets the time-to-live in seconds and returns the envelope for chaining.
+func (e *Envelope) WithTTL(ttl int) *Envelope {
+	e.TTL = ttl
+	return e
+}
+
+// GenerateNonce sets a cryptographically random nonce on the envelope for replay protection.
+func (e *Envelope) GenerateNonce() error {
+	b := make([]byte, 16)
+	if _, err := rand.Read(b); err != nil {
+		return fmt.Errorf("generate nonce: %w", err)
+	}
+	e.Nonce = hex.EncodeToString(b)
+	return nil
 }
 
 // WithMetadata adds a metadata key-value pair and returns the envelope for chaining.
