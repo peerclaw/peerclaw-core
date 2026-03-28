@@ -17,6 +17,9 @@ func Sign(privKey ed25519.PrivateKey, data []byte) (string, error) {
 
 // Verify checks an Ed25519 signature.
 func Verify(pubKey ed25519.PublicKey, data []byte, sig string) error {
+	if pubKey == nil {
+		return fmt.Errorf("public key is nil")
+	}
 	sigBytes, err := base64.StdEncoding.DecodeString(sig)
 	if err != nil {
 		return fmt.Errorf("decode signature: %w", err)
